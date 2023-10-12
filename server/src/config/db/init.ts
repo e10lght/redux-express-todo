@@ -11,13 +11,13 @@ initUsersModel(sequelize);
 initTasksModel(sequelize);
 setupAssociations();
 
-const recreateForceTable = () => {
-  Tasks.sync({ force: true })
-    .then(() => {
-      console.log('Student table has been successfully recreated.');
-    })
-    .catch(error => {
-      console.error('Error recreating Student table:', error);
-    });
-};
-recreateForceTable();
+// const recreateForceTable = () => {
+//   Tasks.sync({ force: true })
+//     .then(() => {
+//       console.log('Student table has been successfully recreated.');
+//     })
+//     .catch(error => {
+//       console.error('Error recreating Student table:', error);
+//     });
+// };
+// recreateForceTable();

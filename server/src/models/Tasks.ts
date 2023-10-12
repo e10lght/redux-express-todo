@@ -8,7 +8,7 @@ type TaskModel = {
   description: string;
   is_completed: boolean;
   due_date: string;
-  user_id: number;
+  user_id: string;
 };
 
 // idは自動生成されるためオプショナルにする
@@ -21,7 +21,7 @@ export class Tasks extends Model<TaskModel, TaskAttributes> {
   public description!: string;
   public is_completed!: boolean;
   public due_date!: string;
-  public user_id!: number;
+  public user_id!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -62,11 +62,12 @@ export const initTasksModel = (sequelize: Sequelize) => {
         allowNull: false
       },
       user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
+        unique: true,
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id'
+          key: 'user_id'
         }
       }
     },

@@ -3,7 +3,7 @@ import { Tasks } from './Tasks';
 
 type UserModel = {
   id: number;
-  user_id: number;
+  user_id: string;
   name: string;
   email: string;
   user_status: boolean;
@@ -15,7 +15,7 @@ interface UserAttributes extends Optional<UserModel, 'id'> {}
 
 export class Users extends Model<UserModel, UserAttributes> {
   id!: number;
-  user_id!: number;
+  user_id!: string;
   name!: string;
   email!: string;
   user_status!: boolean;
@@ -40,6 +40,7 @@ export const initUsersModel = (sequelize: Sequelize) => {
       },
       user_id: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false
       },
       email: {
