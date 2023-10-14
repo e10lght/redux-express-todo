@@ -1,15 +1,27 @@
+import { UnauthorizedError } from '../errors/UnauthorizedError';
 import { Tasks } from '../models/Tasks';
 import { Users } from '../models/Users';
 import { CreateTaskInput, Task, UpdateTaskInput } from '../types/tasks';
 
 export const getTaskByUser = async (userId: string): Promise<Task[] | null> => {
-  const tasks = await Tasks.findAll({
+  const user = await Users.findOne({
     where: {
       user_id: userId
     }
   });
-  if (!tasks) return null;
-  return tasks;
+
+  if (!user) throw new Error('ユーザーを指定してください');
+
+  // 管理者の場合はすべてのタスクを返す
+  if (user.is_admin) {
+    return await Tasks.findAll();
+  }
+
+  return await Tasks.findAll({
+    where: {
+      user_id: userId
+    }
+  });
 };
 
 export const createTask = async (input: CreateTaskInput): Promise<void> => {
@@ -39,7 +51,8 @@ export const createTask = async (input: CreateTaskInput): Promise<void> => {
 
 export const updateTask = async (
   task_id: string,
-  input: UpdateTaskInput
+  input: UpdateTaskInput,
+  user_id: string
 ): Promise<void> => {
   const validKeys: Array<keyof UpdateTaskInput> = [
     'title',
@@ -47,6 +60,21 @@ export const updateTask = async (
     'is_completed',
     'due_date'
   ];
+
+  const task = await Tasks.findOne({
+    where: {
+      task_id
+    }
+  });
+
+  if (!task) {
+    throw new Error('タスクが見つかりません');
+  }
+
+  if (task.user_id !== user_id) {
+    throw new UnauthorizedError('権限がありません');
+  }
+
   for (const key in input) {
     if (!validKeys.includes(key as keyof UpdateTaskInput)) {
       throw new Error(`不正なキー「${key}」が指定されました`);
@@ -60,22 +88,24 @@ export const updateTask = async (
     throw new Error('説明を入力してください');
   }
 
-  const task = await Tasks.findOne({
-    where: {
-      task_id
-    }
-  });
-  if (!task) throw new Error('タスクが見つかりません');
   task.set(input);
   await task.save();
 };
 
-export const deleteTask = async (task_id: string): Promise<void> => {
+export const deleteTask = async (
+  task_id: string,
+  user_id: string
+): Promise<void> => {
   const task = await Tasks.findOne({
     where: {
       task_id
     }
   });
   if (!task) throw new Error('タスクが見つかりません');
+
+  if (task.user_id !== user_id) {
+    throw new UnauthorizedError('権限がありません');
+  }
+
   await task.destroy();
 };

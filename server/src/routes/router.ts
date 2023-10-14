@@ -20,7 +20,7 @@ router.post('/user/create', createUserHandler);
 router.put('/user/update/:user_id', updateUserHandler);
 router.delete('/user/delete/:user_id', deleteUserHandler);
 
-router.get('/task/:user_id', getTaskHandler);
+router.get('/task/list', getTaskHandler);
 router.post('/task/create', createTaskHandler);
 router.put('/task/update/:task_id', updateTaskHandler);
 router.delete('/task/delete/:task_id', deleteTaskHandler);
