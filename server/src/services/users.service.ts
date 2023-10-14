@@ -2,8 +2,8 @@ import { Users } from '../models/Users';
 import { CreateUserInput, UpdateUserInput, User } from '../types/users';
 
 export const createUser = async (input: CreateUserInput): Promise<void> => {
-  if (!input.email) {
-    throw new Error('メールアドレスを入力してください');
+  if (!input.email || !input.password) {
+    throw new Error('メールアドレスまたはパスワードを入力してください');
   }
   const regex: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
   if (!regex.test(input.email)) {
@@ -14,6 +14,9 @@ export const createUser = async (input: CreateUserInput): Promise<void> => {
   }
   if (!input.user_id) {
     throw new Error('ユーザーIDをを指定してください');
+  }
+  if (input.password.length < 8) {
+    throw new Error('パスワードは8文字以上入力してください');
   }
 
   const existingUserByEmail = await Users.findOne({
@@ -67,7 +70,6 @@ export const updateUser = async (
     throw new Error('名前を入力してください');
   }
 
-  console.log(user_id);
   const user = await Users.findOne({
     where: {
       user_id

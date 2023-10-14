@@ -10,6 +10,7 @@ export class Users extends Model<User, UserAttributes> {
   user_id!: string;
   name!: string;
   email!: string;
+  password!: string;
   user_status!: boolean;
   is_admin!: boolean;
 
@@ -40,6 +41,10 @@ export const initUsersModel = (sequelize: Sequelize) => {
         validate: {
           isEmail: true
         },
+        allowNull: false
+      },
+      password: {
+        type: DataTypes.STRING,
         allowNull: false
       },
       name: {

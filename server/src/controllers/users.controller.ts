@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
 import {
   createUser,
   deleteUser,
@@ -28,6 +29,7 @@ export const createUserHandler = async (req: Request, res: Response) => {
       user_id: uuidv4(),
       name: body.name,
       email: body.email,
+      password: bcrypt.hashSync(body.password, 10),
       user_status: body.user_status || false,
       is_admin: body.is_admin || false
     };
