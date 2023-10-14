@@ -49,10 +49,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     const token = jwt.sign({ id: req.auth?.id }, SECRET_KEY, {
       expiresIn: '1h'
     });
-    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+    const oneHour = 60 * 60 * 1000;
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: oneDayInMilliseconds
+      maxAge: oneHour
     });
   }
   next();

@@ -28,7 +28,6 @@ export const loginHandler = async (req: Request, res: Response) => {
 
 export const logoutHandler = (req: Request, res: Response) => {
   try {
-    console.log('logoutHandler');
     res.clearCookie('token');
     res.status(200).json({ message: 'ログアウトに成功しました' });
   } catch (error) {

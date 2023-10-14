@@ -28,8 +28,6 @@ export const login = async (
   if (!isChecked)
     throw new Error('入力したメールアドレスまたはパスワードが間違っています');
 
-  const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1d' });
+  const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1h' });
   return { user, token };
 };
-
-export const logout = async () => {};
