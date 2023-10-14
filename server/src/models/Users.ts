@@ -1,19 +1,11 @@
 import { Model, DataTypes, Optional, Association, Sequelize } from 'sequelize';
+import { User } from '../types/users';
 import { Tasks } from './Tasks';
 
-type UserModel = {
-  id: number;
-  user_id: string;
-  name: string;
-  email: string;
-  user_status: boolean;
-  is_admin: boolean;
-};
-
 // idは自動生成されるためオプショナルにする
-interface UserAttributes extends Optional<UserModel, 'id'> {}
+interface UserAttributes extends Optional<User, 'id'> {}
 
-export class Users extends Model<UserModel, UserAttributes> {
+export class Users extends Model<User, UserAttributes> {
   id!: number;
   user_id!: string;
   name!: string;

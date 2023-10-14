@@ -1,10 +1,10 @@
-// interfaces/IUserRepository.ts
-
-type User = {
+export type User = {
   id: number;
+  user_id: string;
   name: string;
   email: string;
-  password: string;
+  user_status: boolean;
+  is_admin: boolean;
 };
 
 interface IUserRepository {
