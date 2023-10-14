@@ -7,8 +7,5 @@ export type User = {
   is_admin: boolean;
 };
 
-interface IUserRepository {
-  findById(id: number): Promise<User | null>;
-  create(user: User): Promise<User>;
-  // 他の必要なメソッドを追加
-}
+export type CreateUserInput = Omit<User, 'id'>;
+export type UpdateUserInput = Partial<Omit<User, 'id' | 'user_id'>>;

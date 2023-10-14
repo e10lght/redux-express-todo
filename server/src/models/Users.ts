@@ -46,8 +46,8 @@ export const initUsersModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING
       },
       user_status: {
-        type: DataTypes.STRING,
-        defaultValue: 'active'
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       },
       is_admin: {
         type: DataTypes.BOOLEAN,
