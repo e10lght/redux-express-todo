@@ -11,7 +11,11 @@ export const sequelize = new Sequelize(
     host: DB_CONFIG.host,
     port: DB_CONFIG.port,
     dialect: DB_CONFIG.dialect,
-    logging: DB_CONFIG.logging
+    logging: DB_CONFIG.logging,
+    dialectOptions: {
+      useUTC: false
+    },
+    timezone: '+09:00'
   }
 );
 
@@ -25,7 +29,7 @@ initTasksModel(sequelize);
 setupAssociations();
 
 // const recreateForceTable = () => {
-//   Users.sync({ force: true })
+//   Tasks.sync({ force: true })
 //     .then(() => {
 //       console.log('Student table has been successfully recreated.');
 //     })

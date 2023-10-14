@@ -1,20 +1,11 @@
 import { Model, DataTypes, Optional, Association, Sequelize } from 'sequelize';
+import { Task } from '../types/tasks';
 import { Users } from './Users'; // Userモデルへのパスを確認してください
 
-type TaskModel = {
-  id: number;
-  task_id: string;
-  title: string;
-  description: string;
-  is_completed: boolean;
-  due_date: string;
-  user_id: string;
-};
-
 // idは自動生成されるためオプショナルにする
-interface TaskAttributes extends Optional<TaskModel, 'id'> {}
+interface TaskAttributes extends Optional<Task, 'id'> {}
 
-export class Tasks extends Model<TaskModel, TaskAttributes> {
+export class Tasks extends Model<Task, TaskAttributes> {
   public id!: number;
   public task_id!: string;
   public title!: string;
@@ -43,7 +34,8 @@ export const initTasksModel = (sequelize: Sequelize) => {
       },
       task_id: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       title: {
         type: DataTypes.STRING
@@ -63,7 +55,6 @@ export const initTasksModel = (sequelize: Sequelize) => {
       },
       user_id: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
         references: {
           model: 'users',
