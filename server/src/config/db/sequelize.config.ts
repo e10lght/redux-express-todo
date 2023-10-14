@@ -1,13 +1,19 @@
 import { Sequelize } from 'sequelize';
 import { Users, initUsersModel } from '../../models/Users';
 import { Tasks, initTasksModel } from '../../models/Tasks';
+import { DB_CONFIG } from '../config';
 
-export const sequelize = new Sequelize('postgres', 'postgres', 'passw0rd', {
-  host: '127.0.0.1',
-  port: 5436,
-  dialect: 'postgres',
-  logging: false
-});
+export const sequelize = new Sequelize(
+  DB_CONFIG.name,
+  DB_CONFIG.userName,
+  DB_CONFIG.pass,
+  {
+    host: DB_CONFIG.host,
+    port: DB_CONFIG.port,
+    dialect: DB_CONFIG.dialect,
+    logging: DB_CONFIG.logging
+  }
+);
 
 const setupAssociations = () => {
   Users.hasMany(Tasks, { foreignKey: 'user_id' });
