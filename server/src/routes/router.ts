@@ -1,4 +1,5 @@
 import express from 'express';
+import { loginHandler, logoutHandler } from '../controllers/auth.controller';
 import {
   createTaskHandler,
   deleteTaskHandler,
@@ -23,5 +24,8 @@ router.get('/task/:user_id', getTaskHandler);
 router.post('/task/create', createTaskHandler);
 router.put('/task/update/:task_id', updateTaskHandler);
 router.delete('/task/delete/:task_id', deleteTaskHandler);
+
+router.post('/logout', logoutHandler);
+router.post('/login', loginHandler);
 
 export default router;

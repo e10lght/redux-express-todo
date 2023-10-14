@@ -29,7 +29,7 @@ initTasksModel(sequelize);
 setupAssociations();
 
 // const recreateForceTable = () => {
-//   Tasks.sync({ force: true })
+//   Users.sync({ force: true })
 //     .then(() => {
 //       console.log('Student table has been successfully recreated.');
 //     })
