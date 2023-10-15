@@ -1,7 +1,17 @@
+import { UnauthorizedError } from '../errors/UnauthorizedError';
 import { Users } from '../models/Users';
 import { CreateUserInput, UpdateUserInput, User } from '../types/users';
 
-export const createUser = async (input: CreateUserInput): Promise<void> => {
+export const createUser = async (
+  input: CreateUserInput,
+  userId: string
+): Promise<void> => {
+  const user = await Users.findOne({
+    where: { user_id: userId }
+  });
+  if (!user?.is_admin) {
+    throw new UnauthorizedError('権限がありません');
+  }
   if (!input.email || !input.password) {
     throw new Error('メールアドレスまたはパスワードを入力してください');
   }
@@ -47,8 +57,9 @@ export const getUserByUserId = async (userId: string): Promise<User | null> => {
 };
 
 export const updateUser = async (
-  user_id: string,
-  input: UpdateUserInput
+  targetUserId: string,
+  input: UpdateUserInput,
+  userId: string
 ): Promise<void> => {
   const validKeys: Array<keyof UpdateUserInput> = [
     'name',
@@ -70,22 +81,44 @@ export const updateUser = async (
     throw new Error('名前を入力してください');
   }
 
-  const user = await Users.findOne({
+  const targetUser = await Users.findOne({
     where: {
-      user_id
+      user_id: targetUserId
     }
   });
-  if (!user) throw new Error('ユーザが見つかりません');
-  user.set(input);
-  await user.save();
+  const authUser = await Users.findOne({
+    where: {
+      user_id: userId
+    }
+  });
+  if (!targetUser) throw new Error('更新するユーザが見つかりません');
+  if (!authUser) throw new Error('ユーザが見つかりません');
+  if (targetUserId !== userId && !authUser.is_admin)
+    throw new UnauthorizedError('権限がありません');
+  if (!authUser.is_admin && typeof input.is_admin !== 'undefined')
+    throw new UnauthorizedError('権限がありません');
+
+  targetUser.set(input);
+  await targetUser.save();
 };
 
-export const deleteUser = async (user_id: string): Promise<void> => {
-  const user = await Users.findOne({
+export const deleteUser = async (
+  targetUserId: string,
+  authUserId: string
+): Promise<void> => {
+  const targetUser = await Users.findOne({
     where: {
-      user_id
+      user_id: targetUserId
     }
   });
-  if (!user) throw new Error('ユーザが見つかりません');
-  await user.destroy();
+  const authUser = await Users.findOne({
+    where: {
+      user_id: authUserId
+    }
+  });
+  if (!targetUser) throw new Error('更新するユーザが見つかりません');
+  if (!authUser) throw new Error('ユーザが見つかりません');
+  if (targetUserId !== authUserId && !authUser.is_admin)
+    throw new UnauthorizedError('権限がありません');
+  await targetUser.destroy();
 };

@@ -10,4 +10,6 @@ export type User = {
 };
 
 export type CreateUserInput = Omit<User, 'id'>;
-export type UpdateUserInput = Partial<Omit<User, 'id' | 'user_id'>>;
+export type UpdateUserInput = Partial<
+  Omit<User, 'id' | 'user_id' | 'password'>
+>;
