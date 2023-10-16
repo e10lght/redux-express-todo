@@ -93,9 +93,10 @@ export const updateUser = async (
   });
   if (!targetUser) throw new Error('更新するユーザが見つかりません');
   if (!authUser) throw new Error('ユーザが見つかりません');
-  if (targetUserId !== userId && !authUser.is_admin)
-    throw new UnauthorizedError('権限がありません');
-  if (!authUser.is_admin && typeof input.is_admin !== 'undefined')
+  if (
+    !authUser.is_admin &&
+    (typeof input.is_admin !== 'undefined' || targetUserId !== userId)
+  )
     throw new UnauthorizedError('権限がありません');
 
   targetUser.set(input);
@@ -116,7 +117,7 @@ export const deleteUser = async (
       user_id: authUserId
     }
   });
-  if (!targetUser) throw new Error('更新するユーザが見つかりません');
+  if (!targetUser) throw new Error('削除するユーザが見つかりません');
   if (!authUser) throw new Error('ユーザが見つかりません');
   if (targetUserId !== authUserId && !authUser.is_admin)
     throw new UnauthorizedError('権限がありません');
