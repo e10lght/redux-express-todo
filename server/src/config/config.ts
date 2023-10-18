@@ -9,8 +9,7 @@ export const DB_CONFIG = {
     | 'postgres'
     | 'sqlite'
     | 'mariadb'
-    | 'mssql',
-  logging: Boolean(process.env.DB_LOGGING) || false
+    | 'mssql'
 };
 
 export const PORT = process.env.PORT || 3000;

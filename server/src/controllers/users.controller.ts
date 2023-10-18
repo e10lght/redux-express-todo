@@ -16,7 +16,9 @@ export const getUserHandler = async (req: Request, res: Response) => {
     const user = await getUserByUserId(params.user_id);
     res.status(200).json(user);
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof UnauthorizedError) {
+      res.status(403).json({ message: error.message });
+    } else if (error instanceof Error) {
       console.log(error.message);
       res.status(400).json({ message: error.message });
     }
@@ -39,7 +41,7 @@ export const createUserHandler = async (req: Request, res: Response) => {
     res.status(201).json({ message: 'ユーザ追加に成功しました' });
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      res.status(400).json({ message: error.message });
+      res.status(403).json({ message: error.message });
     } else if (error instanceof Error) {
       res.status(400).json({ message: error.message });
     }
@@ -54,7 +56,9 @@ export const updateUserHandler = async (req: Request, res: Response) => {
     await updateUser(user_id, body, authUserId);
     res.status(200).json({ message: 'ユーザの更新が完了しました' });
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof UnauthorizedError) {
+      res.status(403).json({ message: error.message });
+    } else if (error instanceof Error) {
       console.log(error.message);
       res.status(400).json({ message: error.message });
     }
@@ -68,7 +72,9 @@ export const deleteUserHandler = async (req: Request, res: Response) => {
     await deleteUser(targetUser, authUserId);
     res.status(200).json({ message: 'ユーザの削除が完了しました' });
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof UnauthorizedError) {
+      res.status(403).json({ message: error.message });
+    } else if (error instanceof Error) {
       res.status(400).json({ message: error.message });
     }
   }

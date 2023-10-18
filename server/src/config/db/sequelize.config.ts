@@ -11,7 +11,7 @@ export const sequelize = new Sequelize(
     host: DB_CONFIG.host,
     port: DB_CONFIG.port,
     dialect: DB_CONFIG.dialect,
-    logging: DB_CONFIG.logging,
+    logging: true,
     dialectOptions: {
       useUTC: false
     },
