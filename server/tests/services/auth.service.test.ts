@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { LoginInput } from '../../src/types/auth';
 import { login } from '../../src/services/auth.service';
 import bcrypt from 'bcrypt';
+import { AuthenticationError } from '../../src/errors/AuthenticationError';
 
 jest.mock('../../src/models/Users', () => ({
   Users: {
@@ -82,7 +83,7 @@ describe('login', () => {
     };
 
     await expect(login(input)).rejects.toThrow(
-      'メールアドレスを入力してください'
+      new AuthenticationError('メールアドレスを入力してください')
     );
   });
 
@@ -100,7 +101,9 @@ describe('login', () => {
       password: ''
     };
 
-    await expect(login(input)).rejects.toThrow('パスワードを入力してください');
+    await expect(login(input)).rejects.toThrow(
+      new AuthenticationError('パスワードを入力してください')
+    );
   });
 
   it('異常系：ユーザーが見つかりません', async () => {
@@ -116,7 +119,9 @@ describe('login', () => {
       password: '12345678'
     };
 
-    await expect(login(input)).rejects.toThrow('ユーザーが見つかりません');
+    await expect(login(input)).rejects.toThrow(
+      new AuthenticationError('ユーザーが見つかりません')
+    );
   });
 
   it('異常系：入力したメールアドレスまたはパスワードが間違っています', async () => {
@@ -134,7 +139,9 @@ describe('login', () => {
     };
 
     await expect(login(input)).rejects.toThrow(
-      '入力したメールアドレスまたはパスワードが間違っています'
+      new AuthenticationError(
+        '入力したメールアドレスまたはパスワードが間違っています'
+      )
     );
   });
 });
