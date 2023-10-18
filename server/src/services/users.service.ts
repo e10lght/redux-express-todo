@@ -9,7 +9,7 @@ export const createUser = async (
   const user = await Users.findOne({
     where: { user_id: userId }
   });
-  if (!user?.is_admin) {
+  if (!user?.is_admin && input.is_admin) {
     throw new UnauthorizedError('権限がありません');
   }
   if (!input.email || !input.password) {

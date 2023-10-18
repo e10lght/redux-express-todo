@@ -130,11 +130,30 @@ describe('createUser', () => {
     }).not.toThrow();
   });
 
+  it('正常系：管理者の場合管理者ユーザの作成が成功すること', async () => {
+    const mockUser = createMockUser({ is_admin: true });
+
+    (Users.findOne as jest.Mock)
+      .mockResolvedValueOnce(mockUser) // 認証ユーザに対するユーザ取得
+      .mockResolvedValueOnce(null) // 同じメールアドレスが存在しているかどうか
+      .mockResolvedValueOnce(null); // 同じユーザ名が存在しているかどうか
+    (Users.create as jest.Mock).mockResolvedValueOnce(null);
+
+    console.log(mockUser.get());
+    const input = createUserInput({ is_admin: true });
+    console.log(input);
+
+    expect(async () => {
+      await createUser(input, 'test2');
+    }).not.toThrow();
+  });
+
   const testCases = [
     {
-      description: '異常系：権限がありません',
+      description:
+        '異常系：権限がありません（一般ユーザは管理者ユーザの作成はできないこと）',
       mockInput: { is_admin: false },
-      inputOverrides: {},
+      inputOverrides: { is_admin: true },
       expectedError: new UnauthorizedError('権限がありません')
     },
     {
@@ -194,7 +213,10 @@ describe('createUser', () => {
 
     (Users.create as jest.Mock).mockResolvedValueOnce(null);
 
-    const input = createUserInput({ email: 'testtest@example.com' });
+    const input = createUserInput({
+      email: 'testtest@example.com',
+      is_admin: true
+    });
 
     await expect(createUser(input, 'test123')).rejects.toThrow(
       new UnauthorizedError('権限がありません')
