@@ -15,7 +15,9 @@ export const getTaskHandler = async (req: Request, res: Response) => {
     const tasks = await getTaskByUser(userId);
     res.status(200).json(tasks);
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof UnauthorizedError) {
+      res.status(403).json({ message: error.message });
+    } else if (error instanceof Error) {
       console.log(error.message);
       res.status(400).json({ message: error.message });
     }
@@ -38,7 +40,9 @@ export const createTaskHandler = async (req: Request, res: Response) => {
     await createTask(createTaskInput);
     res.status(201).json({ message: 'タスクの追加に成功しました' });
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof UnauthorizedError) {
+      res.status(403).json({ message: error.message });
+    } else if (error instanceof Error) {
       console.log(error.message);
       res.status(400).json({ message: error.message });
     }
@@ -54,7 +58,7 @@ export const updateTaskHandler = async (req: Request, res: Response) => {
     res.status(200).json({ message: 'タスクの更新が完了しました' });
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      res.status(403).send({ message: error.message });
+      res.status(403).json({ message: error.message });
     } else if (error instanceof Error) {
       console.log(error.message);
       res.status(400).json({ message: error.message });
