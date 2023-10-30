@@ -12,9 +12,9 @@ import { UnauthorizedError } from '../errors/UnauthorizedError';
 
 export const getUserHandler = async (req: Request, res: Response) => {
   try {
-    const params = req.params;
-    const user = await getUserByUserId(params.user_id);
-    res.status(200).json(user);
+    const userId = String(req.auth?.id);
+    const users = await getUserByUserId(userId);
+    res.status(200).json(users);
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(403).json({ message: error.message });

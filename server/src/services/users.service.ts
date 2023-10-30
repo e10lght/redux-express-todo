@@ -46,13 +46,18 @@ export const createUser = async (
   await Users.create(input);
 };
 
-export const getUserByUserId = async (userId: string): Promise<User | null> => {
+export const getUserByUserId = async (
+  userId: string
+): Promise<User | User[] | null> => {
   const user = await Users.findOne({
     where: {
       user_id: userId
     }
   });
   if (!user) return null;
+  if (user.is_admin) {
+    return await Users.findAll();
+  }
   return user.get({ plain: true });
 };
 

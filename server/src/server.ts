@@ -11,16 +11,13 @@ const app: express.Express = express();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === 'dev') {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   } else {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  if (req.headers.host) {
-    req.headers.host = 'account-app-client.herokuapp.com';
-  }
   next();
 });
 

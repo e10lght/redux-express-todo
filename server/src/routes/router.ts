@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-router.get('/:user_id', getUserHandler);
+router.get('/user/list', getUserHandler);
 router.post('/user/create', createUserHandler);
 router.put('/user/update/:user_id', updateUserHandler);
 router.delete('/user/delete/:user_id', deleteUserHandler);
