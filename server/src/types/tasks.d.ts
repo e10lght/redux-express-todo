@@ -6,7 +6,11 @@ export type Task = {
   is_completed: boolean;
   due_date: string;
   user_id: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type CreateTaskInput = Omit<Task, 'id'>;
-export type UpdateTaskInput = Partial<Omit<Task, 'id' | 'task_id' | 'user_id'>>;
+export type CreateTaskInput = Omit<Task, 'id' | 'createdAt' | 'updatedAt'>;
+export type UpdateTaskInput = Partial<
+  Omit<Task, 'id' | 'task_id' | 'user_id', 'createdAt' | 'updatedAt'>
+>;

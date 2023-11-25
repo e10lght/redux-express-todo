@@ -61,7 +61,9 @@ const createMockUser = (overrides = {}) => {
   };
 };
 
-const createMockTasks = (overridesArray = [{}, {}]): Task[] => {
+const createMockTasks = (
+  overridesArray = [{}, {}]
+): Omit<Task, 'id' | 'createdAt' | 'updatedAt'>[] => {
   const defaultTask = (
     id: number,
     task_id: string,
@@ -101,7 +103,7 @@ const createMockTasks = (overridesArray = [{}, {}]): Task[] => {
       'テストテスト',
       'テストテストテスト',
       false,
-      '2023-11-11',
+      '5023-11-11',
       'test123',
       overridesArray[0]
     ),
@@ -111,7 +113,7 @@ const createMockTasks = (overridesArray = [{}, {}]): Task[] => {
       'テストテスト2',
       'テストテストテスト2',
       true,
-      '2020-04-11',
+      '5020-04-11',
       'test456',
       overridesArray[1]
     )
@@ -126,7 +128,7 @@ const createTaskInput = (overrides = {}) => {
     title: 'testtest',
     description: 'testtest',
     is_completed: false,
-    due_date: '2023-11-11',
+    due_date: '5023-11-11',
     user_id: 'test123'
   };
 
@@ -141,7 +143,7 @@ const updateTaskInput = (overrides = {}) => {
     title: 'testtest',
     description: 'testtest',
     is_completed: false,
-    due_date: '2023-11-11'
+    due_date: '5023-11-11'
   };
 
   return {

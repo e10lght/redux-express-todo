@@ -6,16 +6,18 @@ export const createUser = async (
   input: CreateUserInput,
   userId: string
 ): Promise<void> => {
+  console.log(userId);
   const user = await Users.findOne({
     where: { user_id: userId }
   });
+  console.log(user);
   if (!user?.is_admin && input.is_admin) {
     throw new UnauthorizedError('権限がありません');
   }
   if (!input.email || !input.password) {
     throw new Error('メールアドレスまたはパスワードを入力してください');
   }
-  const regex: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
   if (!regex.test(input.email)) {
     throw new Error('不正なメールアドレスです');
   }

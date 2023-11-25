@@ -10,6 +10,7 @@ import { ErrorRequestHandler } from 'express';
 const app: express.Express = express();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log('corsの設定');
   if (process.env.NODE_ENV === 'dev') {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   } else {
@@ -28,7 +29,10 @@ app.use(
     secret: SECRET_KEY,
     algorithms: ['HS256'],
     getToken: (req: Request) => req.cookies.token
-  }).unless({ path: ['/api/login'] })
+  }).unless({
+    path: ['/api/login', '/api/logout', '/api/user/create'],
+    method: ['OPTIONS'] // putリクエストのプリフライトリクエストのためにOPTIONSリクエストを除外
+  })
 );
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {

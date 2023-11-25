@@ -3,7 +3,8 @@ import { Task } from '../types/tasks';
 import { Users } from './Users'; // Userモデルへのパスを確認してください
 
 // idは自動生成されるためオプショナルにする
-interface TaskAttributes extends Optional<Task, 'id'> {}
+interface TaskAttributes
+  extends Optional<Task, 'id' | 'createdAt' | 'updatedAt'> {}
 
 export class Tasks extends Model<Task, TaskAttributes> {
   public id!: number;
@@ -53,6 +54,12 @@ export const initTasksModel = (sequelize: Sequelize) => {
         type: DataTypes.DATE,
         allowNull: false
       },
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE
+      },
       user_id: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -64,7 +71,8 @@ export const initTasksModel = (sequelize: Sequelize) => {
     },
     {
       sequelize,
-      tableName: 'tasks'
+      tableName: 'tasks',
+      timestamps: true
     }
   );
 };

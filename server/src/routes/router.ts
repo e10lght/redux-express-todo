@@ -25,7 +25,7 @@ router.post('/task/create', createTaskHandler);
 router.put('/task/update/:task_id', updateTaskHandler);
 router.delete('/task/delete/:task_id', deleteTaskHandler);
 
-router.post('/logout', logoutHandler);
+router.get('/logout', logoutHandler);
 router.post('/login', loginHandler);
 
 export default router;
