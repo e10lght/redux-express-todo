@@ -57,9 +57,10 @@ export const getUserByUserId = async (
     }
   });
   if (!user) return null;
-  if (user.is_admin) {
-    return await Users.findAll();
-  }
+  // リストすべてを返すのは別の関数を用意するべきかも
+  // if (user.is_admin) {
+  //   return await Users.findAll();
+  // }
   return user.get({ plain: true });
 };
 

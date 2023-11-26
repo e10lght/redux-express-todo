@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { AppDispatch } from '../../../store/store';
-import { Task, TasksState } from '../../../types/tasks';
-import { fetchTasks, updateTask } from '../taskAction';
+import { AppDispatch } from '../../../../store/store';
+import { Task, TasksState } from '../../../../types/tasks';
+import { fetchTasks, updateTask } from '../../taskAction';
 import {
   useDisclosure,
   Accordion,
@@ -12,19 +12,23 @@ import {
   Box,
   AccordionIcon,
   AccordionPanel,
-  useToast
+  useToast,
+  Flex
 } from '@chakra-ui/react';
-import { UpdateForm } from './UpdateForm';
-import { CompletedTasksTable } from './CompletedTasksTable';
-import { IncompletedTasksTable } from './IncompletedTasksTable';
+import { UpdateForm } from '../UpdateForm';
+import { CompletedTasksTable } from '../CompletedTasksTable';
+import { IncompletedTasksTable } from '../IncompletedTasksTable';
+import { InsertFormModal } from '../InsertFormModal';
 
 export const TaskList = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const tasks =
     useSelector((state: { task: TasksState }) => state.task.tasks) || [];
+  console.log(tasks);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [targetTask, setTargetTask] = useState<Partial<Task>>({});
 
   useEffect(() => {
     dispatch(fetchTasks())
@@ -76,15 +80,24 @@ export const TaskList = () => {
     // チェックのデバウンス処理と失敗時のチェック戻しと更新後の再フェッチ
   };
 
+  const updateTaskModal = (task: Task) => {
+    console.log(task);
+    setTargetTask(task);
+    onOpen();
+  };
+
   return (
     <>
+      <Flex justifyContent="flex-end" alignItems="center">
+        <InsertFormModal />
+      </Flex>
       <IncompletedTasksTable
         toggleTaskCompletion={toggleTaskCompletion}
         tasks={tasks}
-        onOpen={onOpen}
+        updateTaskModal={updateTaskModal}
       />
 
-      <div>完了</div>
+      <div style={{ marginTop: '15px' }}></div>
       <Accordion allowToggle>
         <AccordionItem>
           <h2>
@@ -105,7 +118,7 @@ export const TaskList = () => {
         </AccordionItem>
       </Accordion>
 
-      <UpdateForm isOpen={isOpen} onClose={onClose} />
+      <UpdateForm isOpen={isOpen} onClose={onClose} task={targetTask} />
     </>
   );
 };

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   Button,
@@ -14,30 +13,33 @@ import {
   FormLabel,
   Input,
   FormErrorMessage,
-  Flex
+  Textarea,
+  Select
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch } from 'react-redux';
+import { fetchTasks, updateTask } from '../taskAction';
+import { Task } from '../../../types/tasks';
+import dayjs from 'dayjs';
+import { AppDispatch } from '../../../store/store';
 
-type Modal = {
+type UpdateFormType = {
   isOpen: boolean;
   onClose: () => void;
+  task: Partial<Task>;
 };
 
-export const UpdateForm: React.FC<Modal> = props => {
-  const { isOpen, onClose } = props;
+export const UpdateForm: React.FC<UpdateFormType> = props => {
+  const { isOpen, onClose, task } = props;
+  console.log(task);
 
   const schema = z.object({
-    email: z
-      .string()
-      .min(1, '必須項目です')
-      .email('メールアドレスの形式が正しくありません'),
-    password: z
-      .string()
-      .min(1, '必須項目です')
-      .min(8, 'パスワードは8文字以上で入力してください')
+    title: z.string().min(1, '必須項目です'),
+    description: z.string().min(1, '必須項目です'),
+    due_date: z.string(),
+    is_completed: z.boolean()
   });
 
   const {
@@ -45,23 +47,41 @@ export const UpdateForm: React.FC<Modal> = props => {
     register,
     formState: { errors, isSubmitting },
     setError,
-    clearErrors
-  } = useForm({
+    clearErrors,
+    setValue
+  } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema)
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const toast = useToast();
 
-  const onSubmit = async (value: any) => {
-    const res = await dispatch(login(value));
+  useEffect(() => {
+    clearErrors('root');
+    setValue('title', task.title!);
+    setValue('description', task.description!);
+    setValue('due_date', dayjs(task.due_date!).format('YYYY-MM-DD'));
+    setValue('is_completed', task.is_completed!);
+  }, [task]);
+
+  const onSubmit = async (value: z.infer<typeof schema>) => {
+    console.log(value);
+    const res = await dispatch(
+      updateTask({
+        value,
+        task_id: task.task_id!
+      })
+    );
+    console.log(res.payload);
     if (!res.payload) {
       setError('root', { type: 'server', message: '不具合が発生しました。' });
     }
-    if (res.payload?.status === 401) {
+    if (res.payload?.status === 403) {
       setError('root', { type: 'server', message: res.payload.message });
     } else if (res.payload?.status === 500) {
+      setError('root', { type: 'server', message: res.payload.message });
+    } else if (res.payload?.status === 400) {
       setError('root', { type: 'server', message: res.payload.message });
     } else if (res.payload?.status === 200) {
       toast({
@@ -72,6 +92,8 @@ export const UpdateForm: React.FC<Modal> = props => {
           </Box>
         )
       });
+      dispatch(fetchTasks());
+      onClose();
     }
   };
 
@@ -83,46 +105,95 @@ export const UpdateForm: React.FC<Modal> = props => {
         <ModalCloseButton />
         <ModalBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl mb={4} isInvalid={!!errors.email}>
-              <FormLabel htmlFor="email">email</FormLabel>
+            <FormControl mb={4} isInvalid={!!errors.title}>
+              <FormLabel htmlFor="title">title</FormLabel>
               <Input
-                id="email"
-                placeholder="email"
+                id="title"
+                placeholder="title"
                 bg="#444444de"
                 border="none"
-                {...register('email')}
+                {...register('title')}
                 onChange={e => {
                   clearErrors('root');
-                  register('email').onChange(e);
+                  register('title').onChange(e);
                 }}
                 _placeholder={{ color: 'rgba(255, 255, 255, 0.5)' }}
               />
               <FormErrorMessage>
-                {typeof errors.email?.message === 'string'
-                  ? errors.email.message
+                {typeof errors.title?.message === 'string'
+                  ? errors.title.message
                   : null}
               </FormErrorMessage>
             </FormControl>
-            <FormControl isInvalid={!!errors.password}>
-              <FormLabel htmlFor="password">password</FormLabel>
-              <Input
-                id="password"
-                placeholder="password"
+
+            <FormControl mb={4} isInvalid={!!errors.description}>
+              <FormLabel htmlFor="description">description</FormLabel>
+              <Textarea
+                id="description"
+                placeholder="description"
                 bg="#444444de"
                 border="none"
-                {...register('password')}
+                {...register('description')}
                 onChange={e => {
-                  clearErrors('root'); // サーバーエラーをクリア
-                  register('password').onChange(e); // react-hook-formのonChangeを呼び出す
+                  clearErrors('root');
+                  register('description').onChange(e);
                 }}
                 _placeholder={{ color: 'rgba(255, 255, 255, 0.5)' }}
               />
               <FormErrorMessage>
-                {typeof errors.password?.message === 'string'
-                  ? errors.password.message
+                {typeof errors.description?.message === 'string'
+                  ? errors.description.message
                   : null}
               </FormErrorMessage>
             </FormControl>
+
+            <FormControl mb={4} isInvalid={!!errors.due_date}>
+              <FormLabel htmlFor="due_date">duedate</FormLabel>
+              <Input
+                id="due_date"
+                placeholder="due_date"
+                bg="#444444de"
+                border="none"
+                type="date"
+                {...register('due_date')}
+                onChange={e => {
+                  clearErrors('root');
+                  register('due_date').onChange(e);
+                }}
+                _placeholder={{ color: 'rgba(255, 255, 255, 0.5)' }}
+              />
+              <FormErrorMessage>
+                {typeof errors.due_date?.message === 'string'
+                  ? errors.due_date.message
+                  : null}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl mb={4} isInvalid={!!errors.is_completed}>
+              <FormLabel htmlFor="isConpleted">isConpleted</FormLabel>
+              <Select
+                id="is_completed"
+                bg="#444444de"
+                border="none"
+                onChange={e => {
+                  clearErrors('root');
+                  const value = e.target.value === '完了';
+                  console.log(e.target.value);
+                  console.log(value);
+                  setValue('is_completed', value);
+                  register('is_completed');
+                }}
+              >
+                <option value="未完了">未完了</option>
+                <option value="完了">完了</option>
+              </Select>
+              <FormErrorMessage>
+                {typeof errors.is_completed?.message === 'string'
+                  ? errors.is_completed.message
+                  : null}
+              </FormErrorMessage>
+            </FormControl>
+
             <FormControl isInvalid={!!errors.root}>
               <FormErrorMessage>
                 {typeof errors.root?.message === 'string'
@@ -130,6 +201,7 @@ export const UpdateForm: React.FC<Modal> = props => {
                   : null}
               </FormErrorMessage>
             </FormControl>
+
             <Button
               colorScheme="teal"
               isLoading={isSubmitting}
@@ -141,13 +213,6 @@ export const UpdateForm: React.FC<Modal> = props => {
             </Button>
           </form>
         </ModalBody>
-
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Task finished
-          </Button>
-          <Button colorScheme="red">Task delete</Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

@@ -58,7 +58,7 @@ export const Header = () => {
       zIndex="10"
     >
       <Box p="5">
-        <Heading size="md">
+        <Heading size="md" as="h1">
           <Text>TODO Lists</Text>
         </Heading>
       </Box>

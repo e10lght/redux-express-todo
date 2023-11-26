@@ -53,3 +53,31 @@ export const updateTask = createAsyncThunk<
 
   return { status: response.status, message: data.message };
 });
+
+export const insertTask = createAsyncThunk<
+  { message: string; status: number },
+  { value: Partial<Task> },
+  { rejectValue: { message: string; status: number } }
+>('tasks/insert', async (target, thunkAPI) => {
+  const { value } = target;
+  const response = await fetch(`http://localhost:3000/api/task/create`, {
+    credentials: 'include',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(value)
+  });
+  const data = await response.json();
+  console.log(data);
+
+  if (!response.ok) {
+    // API呼び出しに失敗した場合、エラーメッセージとステータスを返す
+    return thunkAPI.rejectWithValue({
+      status: response.status,
+      message: data.message
+    });
+  }
+
+  return { status: response.status, message: data.message };
+});

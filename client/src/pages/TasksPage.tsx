@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { Header } from '../components/Header';
-import { TaskList } from '../features/tasks/components/TaskList';
+import { TaskList } from '../features/tasks/components/TaskList/TaskList';
 
 export const TasksPage = () => {
   return (
