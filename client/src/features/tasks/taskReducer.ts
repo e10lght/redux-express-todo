@@ -1,6 +1,6 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { Task, TasksState } from '../../types/tasks';
-import { fetchTasks, insertTask, updateTask } from './taskAction';
+import { deleteTask, fetchTasks, insertTask, updateTask } from './taskAction';
 
 const initialState: TasksState = {
   message: '',
@@ -60,6 +60,25 @@ const tasksReducer = createReducer(initialState, builder => {
     // any使わないとエラーになる https://stackoverflow.com/questions/75070687/createreducer-builder-notation-callback-error
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .addCase(insertTask.rejected, (state, action: PayloadAction<any>) => {
+      state.error = action.payload?.message;
+      state.loading = false;
+    })
+    .addCase(deleteTask.pending, state => {
+      // deleteTaskが実行中の状態を設定
+      state.loading = true;
+    })
+    .addCase(
+      deleteTask.fulfilled,
+      (state, action: PayloadAction<{ message: string; status: number }>) => {
+        // deleteTaskが完了した後の状態を設定
+        state.message = action.payload.message;
+        state.status = action.payload.status;
+        state.loading = false;
+      }
+    )
+    // any使わないとエラーになる https://stackoverflow.com/questions/75070687/createreducer-builder-notation-callback-error
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .addCase(deleteTask.rejected, (state, action: PayloadAction<any>) => {
       state.error = action.payload?.message;
       state.loading = false;
     });

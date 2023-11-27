@@ -107,7 +107,7 @@ export const IncompletedTasksTable: FC<TypeIncompletedTasksTable> = props => {
                         </button>
                       </Td>
                       <Td>
-                        <DeleteCheckPopover />
+                        <DeleteCheckPopover taskid={task.task_id} />
                       </Td>
                     </>
                   )}

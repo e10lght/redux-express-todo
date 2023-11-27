@@ -13,7 +13,7 @@ import {
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { AppDispatch } from '../../../../store/store';
 import { Task, TasksState } from '../../../../types/tasks';
 import { fetchTasks } from '../../taskAction';
@@ -29,6 +29,8 @@ export const TaskDetail = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const dispatch: AppDispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (tasks) {
@@ -47,7 +49,10 @@ export const TaskDetail = () => {
         if (!target) throw new Error('タスクが見つかりません');
         setTargetTask(target);
       })
-      .catch(err => console.error(err.message));
+      .catch(err => {
+        navigate('/');
+        console.error(err.message);
+      });
   }, []);
 
   return (
@@ -87,7 +92,7 @@ export const TaskDetail = () => {
             >
               <EditIcon color="#0099dd" />
             </button>
-            <DeleteCheckPopover />
+            <DeleteCheckPopover taskid={targetTask.task_id!} />
           </nav>
         </CardHeader>
         <CardBody>

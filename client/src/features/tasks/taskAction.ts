@@ -81,3 +81,32 @@ export const insertTask = createAsyncThunk<
 
   return { status: response.status, message: data.message };
 });
+
+export const deleteTask = createAsyncThunk<
+  { message: string; status: number },
+  string,
+  { rejectValue: { message: string; status: number } }
+>('tasks/delete', async (taskid, thunkAPI) => {
+  const response = await fetch(
+    `http://localhost:3000/api/task/delete/${taskid}`,
+    {
+      credentials: 'include',
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  const data = await response.json();
+  console.log(data);
+
+  if (!response.ok) {
+    // API呼び出しに失敗した場合、エラーメッセージとステータスを返す
+    return thunkAPI.rejectWithValue({
+      status: response.status,
+      message: data.message
+    });
+  }
+
+  return { status: response.status, message: data.message };
+});
