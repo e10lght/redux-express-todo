@@ -11,7 +11,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { AppDispatch } from '../../../../store/store';
