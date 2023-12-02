@@ -45,7 +45,6 @@ jobs:
         working-directory: ./server
         env:
           DATABASE_URL: postgres://postgres:passw0rd@localhost:5436/your_test_db
-
     deploy:
       needs: test-server # テストジョブが成功した後に実行されるように設定
       runs-on: ubuntu-latest
