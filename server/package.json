@@ -8,7 +8,9 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "node dist/src/server.js"
+    "dev": "node dist/src/server.js",
+    "start": "build/index.js",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
