@@ -4,13 +4,14 @@ import { Tasks, initTasksModel } from '../../models/Tasks';
 import { DB_CONFIG } from '../config';
 
 export const sequelize = new Sequelize(DB_CONFIG.url, {
-  host: DB_CONFIG.host,
-  port: DB_CONFIG.port,
-  dialect: DB_CONFIG.dialect,
-  logging: false,
   dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    },
     useUTC: false
   },
+  logging: true,
   timezone: '+09:00'
 });
 

@@ -2,7 +2,7 @@ console.log(process.env.DATABASE_URL);
 export const DB_CONFIG = {
   url:
     process.env.DATABASE_URL ||
-    'postgres://postgres:postgres@127.0.0.1:5432/postgres',
+    'postgres://postgres:passw0rd@127.0.0.1:5436/postgres',
   name: process.env.DB_NAME || 'postgres',
   userName: process.env.DB_USER_NAME || 'postgres',
   pass: process.env.DB_PASS || 'passw0rd',
