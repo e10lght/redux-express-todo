@@ -14,11 +14,16 @@ export const Header = () => {
   const navigate = useNavigate();
 
   const logout = async () => {
+    console.log(import.meta.env.VITE_REACT_APP_API_URL);
+
     try {
-      const response = await fetch('http://localhost:3000/api/logout', {
-        credentials: 'include',
-        method: 'GET'
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/api/logout`,
+        {
+          credentials: 'include',
+          method: 'GET'
+        }
+      );
       const result = await response.json();
       toast({
         position: 'bottom-left',
