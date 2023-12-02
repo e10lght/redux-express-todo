@@ -50,7 +50,7 @@ jobs:
   deploy:
     needs: test-server # テストジョブが成功した後に実行されるように設定
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' # masterブランチにのみ適用
+    if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'pull_request')
     steps:
       - uses: actions/checkout@v3
       - name: Set up Git subtree
