@@ -166,7 +166,7 @@ describe('getTaskByUser', () => {
 
     const result = await getTaskByUser(userId);
 
-    expect(result).toEqual({ mockTasks });
+    expect(result).toEqual(mockTasks);
     expect(Users.findOne).toHaveBeenCalledWith({ where: { user_id: userId } });
     expect(Tasks.findAll).toHaveBeenCalled();
   });
