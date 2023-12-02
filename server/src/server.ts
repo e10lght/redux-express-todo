@@ -10,7 +10,6 @@ import { ErrorRequestHandler } from 'express';
 const app: express.Express = express();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log('corsの設定');
   if (process.env.NODE_ENV === 'dev') {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   } else {
