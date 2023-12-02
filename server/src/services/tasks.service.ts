@@ -57,7 +57,7 @@ export const updateTask = async (
   });
 
   if (!task) throw new Error('タスクが見つかりません');
-  if (task.user_id !== user_id) throw new UnauthorizedError('権限がありません');
+  // if (task.user_id !== user_id) throw new UnauthorizedError('権限がありません');
 
   for (const key in input) {
     if (!validKeys.includes(key as keyof UpdateTaskInput))
