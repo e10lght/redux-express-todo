@@ -68,7 +68,7 @@ describe('login', () => {
     expect(result).toEqual({ user: mockUser, token: sampletoken });
   });
 
-  it('異常系：メールアドレスを入力してください', async () => {
+  it('異常系：メールアドレスを入力してください。', async () => {
     const sampletoken = 'sampletoken';
     (jwt.sign as jest.Mock).mockReturnValue(sampletoken);
 
