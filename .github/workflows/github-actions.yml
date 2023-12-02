@@ -12,6 +12,7 @@ on:
 
 jobs:
   test-server:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     services:
@@ -54,9 +55,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Set up Git subtree
         run: |
-          git remote add heroku https://git.heroku.com/salty-meadow-20268.git
+          git config --global user.email "kira_neymar@icloud.com"
+          git config --global user.name "e10lght"
           git subtree split --prefix server -b tmp-branch
-          git push -f heroku tmp-branch:master
-          git branch -D tmp-branch
+          git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/salty-meadow-20268.git tmp-branch:master
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
