@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "dev": "node dist/src/server.js",
-    "start": "node build/index.js",
+    "start": "node dist/src/server.js",
     "build": "tsc"
   },
   "keywords": [],
