@@ -143,7 +143,7 @@ const updateTaskInput = (overrides = {}) => {
     title: 'testtest',
     description: 'testtest',
     is_completed: false,
-    due_date: '5023-11-11'
+    due_date: '1023-11-11'
   };
 
   return {
