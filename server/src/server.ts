@@ -1,11 +1,15 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import express, { NextFunction, Request, Response } from 'express';
 import Router from './routes/router';
-import './config/db/sequelize.config';
-import { PORT, SECRET_KEY } from './config/config';
 import cookieParser from 'cookie-parser';
 import { expressjwt } from 'express-jwt';
 import jwt from 'jsonwebtoken';
 import { ErrorRequestHandler } from 'express';
+import { PORT, SECRET_KEY } from './config/config';
+import './config/db/sequelize.config';
+
+console.log(process.env.DATABASE_URL);
 
 const app: express.Express = express();
 
@@ -13,7 +17,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === 'dev') {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   } else {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+    res.setHeader(
+      'Access-Control-Allow-Origin',
+      process.env.APP_URL || 'http://localhost:5173'
+    );
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');

@@ -6,10 +6,13 @@ export const fetchUser = createAsyncThunk<
   void,
   { rejectValue: { message: string; status: number } }
 >('user/get', async (_arg, thunkAPI) => {
-  const response = await fetch('http://localhost:3000/api/user/list', {
-    credentials: 'include',
-    method: 'get'
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_REACT_APP_API_URL}/api/user/list`,
+    {
+      credentials: 'include',
+      method: 'get'
+    }
+  );
   const data = await response.json();
   console.log(data);
 

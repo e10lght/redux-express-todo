@@ -6,14 +6,17 @@ export const registerUser = createAsyncThunk<
   Register,
   { rejectValue: { message: string; status: number } }
 >('register/signup', async (value: Register, thunkAPI) => {
-  const response = await fetch('http://localhost:3000/api/user/create', {
-    credentials: 'include',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(value)
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_REACT_APP_API_URL}/api/user/create`,
+    {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(value)
+    }
+  );
   const data = await response.json();
   console.log(data);
 

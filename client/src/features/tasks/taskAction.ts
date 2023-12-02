@@ -6,10 +6,13 @@ export const fetchTasks = createAsyncThunk<
   void,
   { rejectValue: { message: string; status: number } }
 >('tasks/get', async (_arg, thunkAPI) => {
-  const response = await fetch('http://localhost:3000/api/task/list', {
-    credentials: 'include',
-    method: 'get'
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_REACT_APP_API_URL}/api/task/list`,
+    {
+      credentials: 'include',
+      method: 'get'
+    }
+  );
   const data = await response.json();
 
   if (!response.ok) {
@@ -30,7 +33,7 @@ export const updateTask = createAsyncThunk<
 >('tasks/update', async (target, thunkAPI) => {
   const { value, task_id } = target;
   const response = await fetch(
-    `http://localhost:3000/api/task/update/${task_id}`,
+    `${import.meta.env.VITE_REACT_APP_API_URL}/api/task/update/${task_id}`,
     {
       credentials: 'include',
       method: 'put',
@@ -60,14 +63,17 @@ export const insertTask = createAsyncThunk<
   { rejectValue: { message: string; status: number } }
 >('tasks/insert', async (target, thunkAPI) => {
   const { value } = target;
-  const response = await fetch(`http://localhost:3000/api/task/create`, {
-    credentials: 'include',
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(value)
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_REACT_APP_API_URL}/api/task/create`,
+    {
+      credentials: 'include',
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(value)
+    }
+  );
   const data = await response.json();
   console.log(data);
 
@@ -88,7 +94,7 @@ export const deleteTask = createAsyncThunk<
   { rejectValue: { message: string; status: number } }
 >('tasks/delete', async (taskid, thunkAPI) => {
   const response = await fetch(
-    `http://localhost:3000/api/task/delete/${taskid}`,
+    `${import.meta.env.VITE_REACT_APP_API_URL}/api/task/delete/${taskid}`,
     {
       credentials: 'include',
       method: 'delete',

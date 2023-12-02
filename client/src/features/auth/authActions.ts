@@ -11,14 +11,17 @@ export const login = createAsyncThunk<
   Login,
   { rejectValue: { message: string; status: number } }
 >('auth/login', async (value: Login, thunkAPI) => {
-  const response = await fetch('http://localhost:3000/api/login', {
-    credentials: 'include',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(value)
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_REACT_APP_API_URL}/api/login`,
+    {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(value)
+    }
+  );
   const data = await response.json();
   // console.log(data);
 
