@@ -48,9 +48,8 @@ jobs:
           DATABASE_URL: postgres://postgres:passw0rd@localhost:5436/your_test_db
 
   deploy:
-    needs: test-server # テストジョブが成功した後に実行されるように設定
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     steps:
       - uses: actions/checkout@v3
       - name: Set up Git subtree
