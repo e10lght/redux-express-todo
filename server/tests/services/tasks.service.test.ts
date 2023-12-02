@@ -143,7 +143,7 @@ const updateTaskInput = (overrides = {}) => {
     title: 'testtest',
     description: 'testtest',
     is_completed: false,
-    due_date: '1023-11-11'
+    due_date: '5023-11-11'
   };
 
   return {
@@ -166,7 +166,7 @@ describe('getTaskByUser', () => {
 
     const result = await getTaskByUser(userId);
 
-    expect(result).toEqual(mockTasks);
+    expect(result).toEqual({ mockTasks });
     expect(Users.findOne).toHaveBeenCalledWith({ where: { user_id: userId } });
     expect(Tasks.findAll).toHaveBeenCalled();
   });
