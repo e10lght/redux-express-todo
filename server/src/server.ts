@@ -59,6 +59,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     const oneHour = 60 * 60 * 1000;
     res.cookie('token', token, {
       httpOnly: true,
+      secure: process.env.NODE_ENV !== 'dev',
+      sameSite: 'none',
       maxAge: oneHour
     });
   }
