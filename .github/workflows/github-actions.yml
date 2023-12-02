@@ -45,3 +45,18 @@ jobs:
         working-directory: ./server
         env:
           DATABASE_URL: postgres://postgres:passw0rd@localhost:5436/your_test_db
+
+    deploy:
+      needs: test-server # テストジョブが成功した後に実行されるように設定
+      runs-on: ubuntu-latest
+      if: github.ref == 'refs/heads/master' # masterブランチにのみ適用
+      steps:
+        - uses: actions/checkout@v3
+        - name: Set up Git subtree
+          run: |
+            git remote add heroku https://git.heroku.com/salty-meadow-20268.git
+            git subtree split --prefix server -b tmp-branch
+            git push -f heroku tmp-branch:master
+            git branch -D tmp-branch
+          env:
+            HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
