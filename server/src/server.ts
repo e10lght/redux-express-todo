@@ -9,19 +9,22 @@ import { ErrorRequestHandler } from 'express';
 import { PORT, SECRET_KEY } from './config/config';
 import './config/db/sequelize.config';
 
-console.log(process.env.DATABASE_URL);
-
 const app: express.Express = express();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  if (process.env.NODE_ENV === 'dev') {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
-  } else {
-    res.setHeader(
-      'Access-Control-Allow-Origin',
-      process.env.APP_URL || 'http://localhost:5173'
-    );
+  const requestOrigin = req.headers.origin;
+  const devOrigin = 'http://localhost:5173';
+
+  if (
+    process.env.NODE_ENV !== 'dev' &&
+    requestOrigin &&
+    requestOrigin.endsWith('.vercel.app')
+  ) {
+    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+  } else if (process.env.NODE_ENV === 'dev' && requestOrigin === devOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', devOrigin);
   }
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
