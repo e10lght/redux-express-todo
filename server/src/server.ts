@@ -18,7 +18,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   if (
     process.env.NODE_ENV !== 'dev' &&
     requestOrigin &&
-    requestOrigin.endsWith('.vercel.app')
+    requestOrigin.endsWith('.kiraito.com')
   ) {
     res.setHeader('Access-Control-Allow-Origin', requestOrigin);
   } else if (process.env.NODE_ENV === 'dev' && requestOrigin === devOrigin) {
