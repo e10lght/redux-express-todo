@@ -12,7 +12,9 @@ export const loginHandler = async (req: Request, res: Response) => {
     const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: oneDayInMilliseconds
+      maxAge: oneDayInMilliseconds,
+      sameSite: 'none',
+      secure: true
     });
 
     res.status(200).json({
