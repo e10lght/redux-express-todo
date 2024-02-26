@@ -73,8 +73,10 @@ export const deleteUserHandler = async (req: Request, res: Response) => {
     res.status(200).json({ message: 'ユーザの削除が完了しました' });
   } catch (error) {
     if (error instanceof UnauthorizedError) {
+      console.error(error);
       res.status(403).json({ message: error.message });
     } else if (error instanceof Error) {
+      console.error(error);
       res.status(400).json({ message: error.message });
     }
   }
