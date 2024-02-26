@@ -17,9 +17,10 @@ export const getUserHandler = async (req: Request, res: Response) => {
     res.status(200).json(users);
   } catch (error) {
     if (error instanceof UnauthorizedError) {
+      console.error(error);
       res.status(403).json({ message: error.message });
     } else if (error instanceof Error) {
-      console.log(error.message);
+      console.log(error);
       res.status(400).json({ message: error.message });
     }
   }
@@ -41,8 +42,10 @@ export const createUserHandler = async (req: Request, res: Response) => {
     res.status(201).json({ message: 'ユーザ追加に成功しました' });
   } catch (error) {
     if (error instanceof UnauthorizedError) {
+      console.error(error);
       res.status(403).json({ message: error.message });
     } else if (error instanceof Error) {
+      console.error(error);
       res.status(400).json({ message: error.message });
     }
   }
@@ -57,8 +60,10 @@ export const updateUserHandler = async (req: Request, res: Response) => {
     res.status(200).json({ message: 'ユーザの更新が完了しました' });
   } catch (error) {
     if (error instanceof UnauthorizedError) {
+      console.error(error);
       res.status(403).json({ message: error.message });
     } else if (error instanceof Error) {
+      console.error(error);
       console.log(error.message);
       res.status(400).json({ message: error.message });
     }
